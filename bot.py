@@ -1,9 +1,11 @@
-
 import discord
 from discord.ext import commands
 import os
 
-TOKEN = os.getenv("MTQzNTMyNjk5MjAzMDQ5ODgxNg.GUXL2j.bf7JquuoG1eAG4yc9eZ_5rBSRJ4gd81VS3Jp3s")
+TOKEN = os.getenv("TOKEN")
+
+if TOKEN is None:
+    raise ValueError("TOKEN environment variable is missing. Add TOKEN in Render Environment Variables.")
 
 BAD_WORDS = ["badword1", "badword2", "curse"]
 
@@ -26,7 +28,6 @@ async def on_member_join(member):
 
 @bot.event
 async def on_message(message):
-
     if message.author.bot:
         return
 
