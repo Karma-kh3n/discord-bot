@@ -1,30 +1,48 @@
-                                                     bot.py
+```python id="q7cx5p"
 import discord
 from discord.ext import commands
+import os
 
-# === CONFIGURATION ===
-TOKEN = "MTQzNTMyNjk5MjAzMDQ5ODgxNg.GUXL2j.bf7JquuoG1eAG4yc9eZ_5rBSRJ4gd81VS3Jp3s"  # replace with your bot token
-BAD_WORDS = ["badword1", "badword2", "curse"]  # add your banned words
+TOKEN = os.getenv("MTQzNTMyNjk5MjAzMDQ5ODgxNg.GUXL2j.bf7JquuoG1eAG4yc9eZ_5rBSRJ4gd81VS3Jp3s")
 
-# === INTENTS ===
+BAD_WORDS = ["badword1", "badword2", "curse"]
+
 intents = discord.Intents.default()
 intents.members = True
 intents.message_content = True
 
 bot = commands.Bot(command_prefix="!", intents=intents)
 
-# === ON READY ===
 @bot.event
 async def on_ready():
     print(f"✅ Logged in as {bot.user}")
 
-# === GREET NEW MEMBERS ===
 @bot.event
 async def on_member_join(member):
-    # Sends greeting message in the server's default channel
     if member.guild.system_channel:
-        await member.guild.system_channel.send(f"👋 Welcome to the server, {member.mention}!")
+        await member.guild.system_channel.send(
+            f"👋 Welcome to the server, {member.mention}!"
+        )
 
-# === MODERATE MESSAGES ===
 @bot.event
 async def on_message(message):
+
+    if message.author.bot:
+        return
+
+    for word in BAD_WORDS:
+        if word.lower() in message.content.lower():
+            await message.delete()
+            await message.channel.send(
+                f"⚠️ {message.author.mention}, that word is not allowed."
+            )
+            return
+
+    await bot.process_commands(message)
+
+@bot.command()
+async def ping(ctx):
+    await ctx.send("🏓 Pong!")
+
+bot.run(TOKEN)
+```
