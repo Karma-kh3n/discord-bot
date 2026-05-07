@@ -1,4 +1,4 @@
-GNU nano 8.6                                                         bot.py
+                                                     bot.py
 import discord
 from discord.ext import commands
 
