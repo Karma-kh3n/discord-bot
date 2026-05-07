@@ -1,4 +1,4 @@
-```python id="q7cx5p"
+
 import discord
 from discord.ext import commands
 import os
